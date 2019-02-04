@@ -18,6 +18,7 @@ maxBallAcceleration = 5
 from soccersimulator import Strategy, SoccerAction, Vector2D, SoccerTeam, Simulation, show_simu
 from tools import *
 import math
+from actions import *
 
 class Tir(Strategy):
     def __init__(self):
@@ -47,33 +48,9 @@ class Defenseur(Strategy):
         
     def compute_strategy(self,state,id_team, id_player):
         s = SuperState(state, id_team, id_player)
-        if (s.test_ball):
-            goal_adverse = goal_opponent(id_team)
-            force = 10
-            player = s.player
-            move = deplacement(player)
-            shoot = Vector2D(0,0)
-            if s.can_shoot:
-                shoot = shoot(state, id_team, id_player, goal_adverse, force)
-                
-            return SoccerAction(move, shoot)
-      
-        goal = self.goal()
-        position_balle = self.ball()
-        goalTop = goal + Vector2D(0,GAME_GOAL_HEIGHT/2.)
-        goalBot = goal - Vector2D(0, GAME_GOAL_HEIGHT/2.)
-        
-        ballToGoalTop = goalTop - position_balle
-        ballToGoalBot = goalBot - position_balle
-        angle = (ballToGoalTop.angle + ballToGoalBot.angle)/2.
-        vect = Vector2D(norm=1./cos(angle)*ballToGoalBot.x/2., angle=angle)
-        
-        move = s.deplacement(vect+position_balle)
-        shoot = Vector2D(0,0)
-        if can_shoot(state, id_team, id_player):
-            shoot = shoot(state, id_team, id_player, goal_opponent, force)
-            
-        return SoccerAction(move, shoot) 
+       move = move(s)
+       shoot = shoot(s)
+       if 
 #
 class Gardien(Strategy):
     def __init__(self):
