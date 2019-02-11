@@ -40,6 +40,10 @@ class Tir(Strategy):
                 return SoccerAction(shoot=cage1-joueur)
             else:
                 return SoccerAction(acceleration=balle-joueur)
+            
+class Defenseur1(Strategy):
+            
+            
 
 class Defenseur(Strategy):
     def __init__(self):

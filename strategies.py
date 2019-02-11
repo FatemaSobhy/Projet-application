@@ -41,15 +41,16 @@ class Tir(Strategy):
                 return SoccerAction(shoot=cage1-joueur)
             else:
                 return SoccerAction(acceleration=balle-joueur)
-
-#defenseur-attaquant en 1 contre 1
+#
+##defenseur-attaquant en 1 contre 1
 #class Defenseur1(Strategy):
 #    def __init__(self):
 #        Strategy.__init__(self, "Defenseur 1")
 #    def compute_strategy(self, state,id_team, id_player):
 #        s = SuperState(state, id_team, id_player)
+#        if ( s.player_with_ball){}
 #        
-    
+#    
 
     
     
@@ -64,15 +65,15 @@ class Tir(Strategy):
     
     
     
-class Defenseur(Strategy):
-    def __init__(self):
-        Strategy.__init__(self, "Defenseur")
-        
-    def compute_strategy(self,state,id_team, id_player):
-        s = SuperState(state, id_team, id_player)
-       move = move(s)
-       shoot = shoot(s)
-       if 
+#class Defenseur(Strategy):
+#    def __init__(self):
+#        Strategy.__init__(self, "Defenseur")
+#        
+#    def compute_strategy(self,state,id_team, id_player):
+#        s = SuperState(state, id_team, id_player)
+#       move = move(s)
+#       shoot = shoot(s)
+#       if 
 #
 class Gardien(Strategy):
     def __init__(self):
@@ -96,10 +97,11 @@ team2 = SoccerTeam(name="Team 2")
 
 # Add players
 team1.add("Tireur", Tir())  # Random strategy
-team1.add("Gardien",Gardien())
-team2.add("Gardien", Gardien())   # Static strategy
-team1.add("Defenseur", Defenseur())
-team2.add("Defenseur", Defenseur())
+#team1.add("Gardien",Gardien())
+#team2.add("Gardien", Gardien())   # Static strategy
+#team1.add("Defenseur", Defenseur())
+#team2.add("Defenseur", Defenseur())
+team2.add("Tireur", Tir())  # Random strategy
 
 # Create a match
 simu = Simulation(team1, team2)

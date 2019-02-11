@@ -13,7 +13,7 @@ class Shoot(object):
 		self.superstate = superstate
 	def shoot(self, direction = None):
 		dist = self.superstate.player.distance(self.sueprstate.ball)
-		if (dist < PLAYER_RADIUS + BALL_RADIUS :
+		if (dist < PLAYER_RADIUS + BALL_RADIUS):
 			return SoccerAction(shoot = direction)
 		else: 
 			return SoccerAction()
