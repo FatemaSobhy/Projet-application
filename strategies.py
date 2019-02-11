@@ -42,6 +42,28 @@ class Tir(Strategy):
             else:
                 return SoccerAction(acceleration=balle-joueur)
 
+#defenseur-attaquant en 1 contre 1
+#class Defenseur1(Strategy):
+#    def __init__(self):
+#        Strategy.__init__(self, "Defenseur 1")
+#    def compute_strategy(self, state,id_team, id_player):
+#        s = SuperState(state, id_team, id_player)
+#        
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 class Defenseur(Strategy):
     def __init__(self):
         Strategy.__init__(self, "Defenseur")
