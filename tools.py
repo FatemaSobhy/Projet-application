@@ -59,7 +59,12 @@ class SuperState(object):
     @property
     def opponents(self):
         return [self.state.player_state(id_team, id_player).position for (id_team, id_player) in self.state.players if id_team != self.id_team] [1]
-    
+    #si il est un opposants ou pas
+    @property
+    def Test_opponents(self):
+        for i in opponents:
+            return true
+        return false
 	#trouver l'adversaire le plus proche 
     def proche_adversaire(self):
         return min([(self.player.distance(player), player) for player in opponents])

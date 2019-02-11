@@ -51,9 +51,31 @@ class Tir(Strategy):
 #        if ( s.player_with_ball){}
 #        
 #    
-
-    
-    
+#class Defenseur1(Strategy):
+#    def __init__(self):
+#        Strategy.__init__(self,"Defenseur1")
+#    def compute_strategy(self, state, id_team, id_player):
+#        s= SuperState(state, id_team, id_player)
+#        if(!(s.test_ball)):
+#            balle = state.ball.position
+#            joueur = state.player_state(id_team, id_player).position
+#            cage2 = Vector2D(GAME_WIDTH,GAME_HEIGHT/2,)
+#            cage1 = Vector2D(0,GAME_HEIGHT/2)
+#            if (id_team == 1):
+#                if balle.distance(joueur) < PLAYER_RADIUS + BALL_RADIUS:
+#                    return SoccerAction(shoot=cage2-joueur)
+#                else:
+#                    return SoccerAction(acceleration=balle-joueur)
+#            else:
+#                if balle.distance(joueur) < PLAYER_RADIUS + BALL_RADIUS:
+#                    return SoccerAction(shoot=cage1-joueur)
+#                else:
+#                    return SoccerAction(acceleration=balle-joueur)
+#        else:
+#            if(Test_opponents):
+#                return deplacement(s.ball)
+#    
+#    
     
     
     
@@ -81,30 +103,21 @@ class Gardien(Strategy):
         
     def compute_strategy(self,state, id_team, id_player):
         s= SuperState(state, id_team, id_player)
-
-        if s.player.distance(s.ball) < PLAYER_RADIUS + BALL_RADIUS:
-            shoot=(s.goal_opponent - s.player)
-            return SoccerAction(shoot= shoot.normalize()*1500)
-        elif s.player.distance(s.ball) < PLAYER_RADIUS*3:
-            return SoccerAction(acceleration= s.deplacement(s.ball))
-        else:
-            return SoccerAction(acceleration = s.deplacement(s.goal))
-
+        if id_team == 1:
+            if s.ball.x > GAME_WIDTH/2:
+                if s.player.distance(s.ball) < PLAYER_RADIUS + BALL_RADIUS:
+                    shoot=(s.goal_opponent - s.player)
+                    return SoccerAction(shoot= shoot.normalize()*1500)
+                elif s.player.distance(s.ball) < PLAYER_RADIUS*3:
+                    return SoccerAction(acceleration= s.deplacement(s.ball))
+                else:
+                    return SoccerAction(acceleration = s.deplacement(s.goal))
+            elif s.ball.x < GAME_WIDTH/2 :
+                deplacement= state.ball.position -state.player_state(id_team, id_player).position
+                if id_team ==2:
+                    tir = Vector2D(0,45) - state.ball. position
+                else:
+                    tir = Vector2D(150, 45) - state.ball.position
+                    return SoccerAction(deplacement, tir)
     
-# Create teams
-team1 = SoccerTeam(name="Team 1")
-team2 = SoccerTeam(name="Team 2")
 
-# Add players
-team1.add("Tireur", Tir())  # Random strategy
-#team1.add("Gardien",Gardien())
-#team2.add("Gardien", Gardien())   # Static strategy
-#team1.add("Defenseur", Defenseur())
-#team2.add("Defenseur", Defenseur())
-team2.add("Tireur", Tir())  # Random strategy
-
-# Create a match
-simu = Simulation(team1, team2)
-
-# Simulate and display the match
-show_simu(simu)
