@@ -51,31 +51,21 @@ class Tir(Strategy):
 #        if ( s.player_with_ball){}
 #        
 #    
-#class Defenseur1(Strategy):
-#    def __init__(self):
-#        Strategy.__init__(self,"Defenseur1")
-#    def compute_strategy(self, state, id_team, id_player):
-#        s= SuperState(state, id_team, id_player)
-#        if(!(s.test_ball)):
-#            balle = state.ball.position
-#            joueur = state.player_state(id_team, id_player).position
-#            cage2 = Vector2D(GAME_WIDTH,GAME_HEIGHT/2,)
-#            cage1 = Vector2D(0,GAME_HEIGHT/2)
-#            if (id_team == 1):
-#                if balle.distance(joueur) < PLAYER_RADIUS + BALL_RADIUS:
-#                    return SoccerAction(shoot=cage2-joueur)
-#                else:
-#                    return SoccerAction(acceleration=balle-joueur)
-#            else:
-#                if balle.distance(joueur) < PLAYER_RADIUS + BALL_RADIUS:
-#                    return SoccerAction(shoot=cage1-joueur)
-#                else:
-#                    return SoccerAction(acceleration=balle-joueur)
-#        else:
-#            if(Test_opponents):
-#                return deplacement(s.ball)
-#    
-#    
+class Defenseur1(Strategy):
+    def __init__(self):
+        Strategy.__init__(self,"Defenseur1")
+    def compute_strategy(self, state, id_team, id_player):
+        s= SuperState(state, id_team, id_player)
+        if s.teamdef[1]:
+            return SoccerAction(Vector2D(GAME_WIDTH*(s.teamdef[0]), (s.ballameliorer.y +s.goal.y)/2)-s.player,s.goal - s.player)
+        else:
+            if s.player.distance(s.ball)< PLAYER_RADIUS + BALL_RADIUS:
+                return SoccerAction(shoot =s.coequipier -s.player)
+            else:
+                return SoccerAction(acceleration = s.ballameliorer -s.player)
+       
+    
+    
     
     
     

@@ -20,7 +20,7 @@ team1.add("Gardien",Gardien())
 team2.add("Gardien", Gardien())   # Static strategy
 #team1.add("Defenseur", Defenseur())
 #team2.add("Defenseur", Defenseur())
-team2.add("Tireur",Tir())  # Random strategy
+team2.add("Tireur",Defenseur1())  # Random strategy
 
 # Create a match
 simu = Simulation(team1, team2)

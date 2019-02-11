@@ -63,8 +63,8 @@ class SuperState(object):
     @property
     def Test_opponents(self):
         for i in opponents:
-            return true
-        return false
+            return True
+        return False
 	#trouver l'adversaire le plus proche 
     def proche_adversaire(self):
         return min([(self.player.distance(player), player) for player in opponents])
@@ -83,5 +83,21 @@ class SuperState(object):
     def test_ball(self):
         return (self.player_with_ball == self.player)
     
-
-	 
+    @property
+    def ballameliorer(self):
+        return self.state.ball.position  + 5* self.state.ball.vitesse
+    @property 
+    def teamdef(self):
+        if self.id_team == 1:
+            (posdef.condition) = (1/4, self.ballameliorer.x > GAME_WIDTH*(1/3))
+        else:
+            (posdef,condition) =(3/4, self.ballameliorer.x < GAME_WIDTH*(2/3))
+        return (posdef, condition)
+    @property
+    def coequipier(self):
+        for(id_team, id_player) in self.state.players:
+            if (id_team == self.id_team) and (id_player != self.id_player):
+                return self.state.player_state(id_team, id_player).position
+            
+            
+            
