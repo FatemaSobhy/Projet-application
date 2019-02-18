@@ -110,11 +110,11 @@ class SuperState(object):
 
 class SimpleStrategy ( Strategy ):
     def __init__ ( self , action , name ):
-        super (). __init__ ( name )
-        self . action = action
+        super().__init__ ( name )
+        self.action = action
         
-    def compute_strategy ( self , state , id_team , id_player ):
-        s = SuperState ( state , id_team , id_player )
-        return self . action ( s )
+    def compute_strategy (self, state , id_team , id_player):
+        s = SuperState (state , id_team , id_player )
+        return self.action(s)
             
             
