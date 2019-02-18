@@ -7,15 +7,13 @@ Created on Mon Feb 18 12:22:07 2019
 """
 
 from soccersimulator import Strategy, SoccerAction, Vector2D, SoccerTeam, Simulation, show_simu
-from strategies import *
+from .strategies1 import *
 
 def get_team(nb_players):
-    def get_team (nb_players):
     team = SoccerTeam (name = "Fateam & Rania")
     if nb_players == 1:
-        team.add ("Striker", Tir())
+        team.add ("Striker", SimpleStrategy(attaquant, 'Attaquant1'))
     if nb_players == 2:
-        team.add ("Striker", Tir())
-        team.add ("Random", RandomStrategy())
-    
+        team.add ("Attaquant1", SimpleStrategy(attaquant, 'Attaquant1'))
+        team.add ("Defenseur1", SimpleStrategy(defenseur, 'Defenseur1'))
     return team

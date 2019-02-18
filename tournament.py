@@ -5,28 +5,14 @@ Created on Mon Feb  4 19:07:02 2019
 
 @author: 3701014
 """
-from strategies1 import *
-from soccersimulator import SoccerTeam, Simulation, show_simu
 from rania_fatema import get_team
+from soccersimulator import Simulation , show_simu
 
-def get_team (nb_players):
-    team = SoccerTeam (name = "Fateam & Rania")
-    if nb_players == 1:
-        team.add ("Striker", Tir())
-    if nb_players == 2:
-        team.add ("Striker", Tir())
-        team.add ("Random", RandomStrategy())
-    
-    return team
-
-if __name__ == '__main__':
-    from soccersimulator import Simulation , show_simu
-    
-    # Check teams with 1 player and 2 players
-    team1 = get_team (1)
-    team2 = get_team (2)
-    # Create a match
-    simu = Simulation ( team1 , team2 )
-    # Simulate and display the match
-    show_simu ( simu )
+# Check teams with 1 player and 2 players
+team1 = get_team (1)
+team2 = get_team (2)
+# Create a match
+simu = Simulation ( team1 , team2 )
+# Simulate and display the match
+show_simu ( simu )
 
