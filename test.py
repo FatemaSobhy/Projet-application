@@ -15,12 +15,12 @@ team1 = SoccerTeam(name="Team 1")
 team2 = SoccerTeam(name="Team 2")
 
 # Add players
-team1.add("Tireur", Tir())  # Random strategy
-team1.add("Gardien",Gardien())
-team2.add("Gardien", Gardien())   # Static strategy
+team1.add("Tireur1", Tir())  # Random strategy
+team1.add("Defenseur1",Defenseur())
+team2.add("Tireur2", Tir())   # Static strategy
 #team1.add("Defenseur", Defenseur())
 #team2.add("Defenseur", Defenseur())
-team2.add("Tireur",Defenseur1())  # Random strategy
+team2.add("Defenseur",Defenseur())  # Random strategy
 
 # Create a match
 simu = Simulation(team1, team2)

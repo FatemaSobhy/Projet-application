@@ -5,8 +5,9 @@ Created on Mon Feb  4 19:07:02 2019
 
 @author: 3701014
 """
-from strategies import *
+from strategies1 import *
 from soccersimulator import SoccerTeam, Simulation, show_simu
+from rania_fatema import get_team
 
 def get_team (nb_players):
     team = SoccerTeam (name = "Fateam & Rania")

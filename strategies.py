@@ -1,19 +1,6 @@
 # -*- coding: utf-8 -*-
 # coding: utf-8
 
-# Rayon d'un joueur
-PLAYER_RADIUS =1.
-#Rayon de la balle 
-BALL_RADIUS = 0.65
-#Longueur du terrain
-GAME_WIDTH = 150 
-#Largeur du terrain 
-GAME_HEIGHT= 90
-GAME_GOAL_HEIGHT = 10 
-MAX_GAME_STEPS = 2000
-max_PlayerSpeed = 1
-maxPlayerAcceleration = 0.2
-maxBallAcceleration = 5
 
 from soccersimulator import Strategy, SoccerAction, Vector2D, SoccerTeam, Simulation, show_simu
 from tools import *
@@ -63,30 +50,23 @@ class Defenseur1(Strategy):
                 return SoccerAction(shoot =s.coequipier -s.player)
             else:
                 return SoccerAction(acceleration = s.ballameliorer -s.player)
-       
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-#class Defenseur(Strategy):
-#    def __init__(self):
-#        Strategy.__init__(self, "Defenseur")
-#        
-#    def compute_strategy(self,state,id_team, id_player):
-#        s = SuperState(state, id_team, id_player)
-#       move = move(s)
-#       shoot = shoot(s)
-#       if 
-#
+class Defenseur(Strategy):
+    def __init__(self):
+        Strategy.__init__(self, "Defenseur")
+        
+    def compute_strategy(self,state, id_team, id_player):
+        print('defenseur')
+        s= SuperState(state, id_team, id_player)    
+
+        if s.can_shoot:
+            shoot=(s.goal_opponent - s.player)
+            return SoccerAction(shoot= shoot.normalize()*1500)
+        elif s.player.distance(s.ball) < PLAYER_RADIUS*3:
+            return SoccerAction(acceleration= s.deplacement(s.ball))
+        else:
+            return SoccerAction(acceleration = s.deplacement(s.proche_adversaire()[1]))
+
 class Gardien(Strategy):
     def __init__(self):
         Strategy.__init__(self, "Gardien")

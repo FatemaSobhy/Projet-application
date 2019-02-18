@@ -15,8 +15,8 @@ class SuperState(object):
         self.id_team = id_team 
         self.id_player = id_player
 
-#    def __getattr__(self, attr):
-#        return getattr(self.state, attr)     
+    def __getattr__(self, attr):
+        return getattr(self.state, attr)     
 
     @property
     def ball(self):
@@ -49,7 +49,7 @@ class SuperState(object):
     
     @property
     def can_shoot(self):
-        return (self.state.ball.position - state.player_state(id_team, id_player).position).norm <= BALL_RADIUS + PLAYER_RADIUS
+        return (self.state.ball.position - self.state.player_state(self.id_team, self.id_player).position).norm <= BALL_RADIUS + PLAYER_RADIUS
     
     @property
     def shoot(self, target, strength):
@@ -58,7 +58,7 @@ class SuperState(object):
 	#liste des opposants
     @property
     def opponents(self):
-        return [self.state.player_state(id_team, id_player).position for (id_team, id_player) in self.state.players if id_team != self.id_team] [1]
+        return [self.state.player_state(id_team, id_player).position for (id_team, id_player) in self.state.players if id_team != self.id_team]
     #si il est un opposants ou pas
     @property
     def Test_opponents(self):
@@ -67,7 +67,7 @@ class SuperState(object):
         return False
 	#trouver l'adversaire le plus proche 
     def proche_adversaire(self):
-        return min([(self.player.distance(player), player) for player in opponents])
+        return min([(self.player.distance(player), player) for player in self.opponents])
 	#liste des players
     @property
     def list_player(self):
@@ -89,15 +89,32 @@ class SuperState(object):
     @property 
     def teamdef(self):
         if self.id_team == 1:
-            (posdef.condition) = (1/4, self.ballameliorer.x > GAME_WIDTH*(1/3))
+            (posdef, condition) = (1/4, self.ballameliorer.x > GAME_WIDTH*(1/3))
         else:
             (posdef,condition) =(3/4, self.ballameliorer.x < GAME_WIDTH*(2/3))
         return (posdef, condition)
+    @property 
+    def teamatt(self):
+        if self.id_team == 1:
+            (posatta, nextpos) = (self.player.x < GAME_WIDTH*(1/2), GAME_WIDTH*(6/10))
+        else:
+            (posatta,nextpos) =(self.player.x > GAME_WIDTH*(1/2), GAME_WIDTH*(4/10))
+        return (posatta, nextpos)
+        
     @property
     def coequipier(self):
         for(id_team, id_player) in self.state.players:
             if (id_team == self.id_team) and (id_player != self.id_player):
                 return self.state.player_state(id_team, id_player).position
-            
+
+
+class SimpleStrategy ( Strategy ):
+    def __init__ ( self , action , name ):
+        super (). __init__ ( name )
+        self . action = action
+        
+    def compute_strategy ( self , state , id_team , id_player ):
+        s = SuperState ( state , id_team , id_player )
+        return self . action ( s )
             
             
