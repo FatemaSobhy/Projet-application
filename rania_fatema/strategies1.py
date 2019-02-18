@@ -16,18 +16,18 @@ def gobetter(state):
     if state.player.distance(state.ball) < PLAYER_RADIUS + BALL_RADIUS:
         return SoccerAction(shoot=state.goal - state.player) 
     else:
-        return SoccerAction(acceleration=state.ball - state.player) 
+        return SoccerAction(acceleration=state.ballameliorer - state.player) 
 
 
 def gobetterdef(state):
     if state.player.distance(state.ball) < PLAYER_RADIUS + BALL_RADIUS:
-        return SoccerAction(shoot= state.coeauipier - state.player)
+        return SoccerAction(shoot= state.coequipier - state.player)
     else:
         return SoccerAction(acceleration = state.ballameliorer -state.player)
     
 def defenseur(state):
     if state.teamdef[1]:
-        return SoccerAction(Vector2D(GAME_WIDTH *(state.teamdef[0]),(state.ball.y + state.goal.y)/2)-state.player, state.goal -state.player)
+        return SoccerAction(Vector2D(GAME_WIDTH *(state.teamdef[0]),(state.ballameliorer.y + state.goal.y)/2)-state.player, state.goal -state.player)
     else:
         return gobetterdef(state)
 
@@ -40,11 +40,11 @@ def gobetteratt (state):
                 return SoccerAction(acceleration = state.ballameliorer-state.player)
         else:
             if state.player.distance(state.ball) < PLAYER_RADIUS + BALL_RADIUS:
-                return SoccerAction(shoot = Vector2D(state.teamatt[1],GAME_WEIGHT)-state.player)
+                return SoccerAction(shoot = Vector2D(state.teamatt[1],GAME_HEIGHT)-state.player)
             else:
                 return SoccerAction(acceleration= state.ballameliorer -state.player)
     else:
-        if state.player.distance(sttae.ball) < PLAYER_RADIUS + BALL_RADIUS:
+        if state.player.distance(state.ball) < PLAYER_RADIUS + BALL_RADIUS:
             return SoccerAction(shoot = state.goal -state.player)
         else:
             return SoccerAction(acceleration = state.ballameliorer -state.player)
@@ -71,7 +71,3 @@ simu = Simulation(team1, team2)
 
 # Simulate and display the match
 show_simu(simu) 
-    
-
-
-team1.add("defenseur1", SimpleStrategy(defenseur2 , 'defenseur2')) 
