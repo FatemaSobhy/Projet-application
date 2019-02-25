@@ -20,12 +20,12 @@ class Tir(Strategy):
        
         if (id_team == 1):
             if s.can_shoot:
-                return SoccerAction(shoot= s.goal_opponent - joueur)
+                return SoccerAction(shoot = s.goal_opponent - joueur)
             else:
-                return SoccerAction(acceleration= balle-joueur)
+                return SoccerAction(acceleration = balle-joueur)
         else:
             if s.can_shoot:
-                return SoccerAction(shoot= s.goal_opponent-joueur)
+                return SoccerAction(shoot = s.goal_opponent-joueur)
             else:
                 return SoccerAction(acceleration=balle - joueur)
     

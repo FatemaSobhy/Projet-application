@@ -11,8 +11,8 @@ import math
 from .actions import *
 from sklearn.model_selection import ParameterGrid
 
-class GoalSearch ( object ):
-    def __init__( self , strategy , params , simu = None , trials =20 ,
+class GoalSearch (object):
+    def __init__(self , strategy , params , simu = None , trials = 20,
                   max_steps =1000000 , max_round_step= 40):
         self.strategy = strategy
         self.params = params.copy()
@@ -58,16 +58,16 @@ class GoalSearch ( object ):
 
         # Set the current value for the current parameters
         for key,value in self.cur_param.items():
-            setattr(self.strategy , key , value )
+            setattr(self.strategy, key, value)
             
-    def end_round( self , team1 , team2 , state ):
+    def end_round(self , team1 , team2 , state):
         # A round ends when there is a goal of if max step is achieved
         if state.goal > 0:
             self.criterion += 1 # Increment criterion
         
         self.cpt_trials += 1# Increment number of trials
             
-        print( self.cur_param , end = " ␣ ␣ ␣ ␣ " )
+        print(self.cur_param, end = " ␣ ␣ ␣ ␣ ")
         print(" Crit : ␣ {} ␣ ␣ ␣ Cpt : ␣ {} ". format( self.criterion , self . cpt_trials ))
 
         if self.cpt_trials >= self.trials :
