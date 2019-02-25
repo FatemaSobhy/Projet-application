@@ -3,7 +3,7 @@
 """
 Created on Mon Feb  4 19:07:02 2019
 
-@author: 3701014
+@author: 3701014 and Rania
 """
 from rania_fatema import get_team
 from soccersimulator import Simulation , show_simu
