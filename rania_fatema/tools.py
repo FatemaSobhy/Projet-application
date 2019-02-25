@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 28 16:12:52 2019
 
-@author: 3522495
-"""
 from math import *
 from soccersimulator import*
 
@@ -34,8 +30,22 @@ class SuperState(object):
     def goal_opponent(self):
         return Vector2D(GAME_WIDTH * (2- self.id_team), GAME_HEIGHT /2)
     
+    #id_team de l'équipe adverse
+    @property
+    def id_opponent(self):
+        return (self.id_team % 2)+1
+    
     def deplacement(self, obj):
         return (obj -self.player).normalize()*1500
+    
+    @property
+    def goal_radius(self):
+        return GAME_GOAL_HEIGHT/2.
+    
+    #centre des cages
+    @property
+    def goal_center(self):
+        return self.goal_radius + GAME_HEIGHT/2.
     
     #foncer vers le but 
     @property
@@ -55,37 +65,61 @@ class SuperState(object):
     def shoot(self, target, strength):
         return (target-state.player_state(id_team, id_player).position).normalize() * strength
     
-	#liste des opposants
+	#liste des opponents
     @property
     def opponents(self):
         return [self.state.player_state(id_team, id_player).position for (id_team, id_player) in self.state.players if id_team != self.id_team]
-    #si il est un opposants ou pas
+    
+    #si c'est un adversaire ou pas
     @property
     def Test_opponents(self):
         for i in opponents:
             return True
         return False
-	#trouver l'adversaire le plus proche 
-    def proche_adversaire(self):
+	
+    #trouver l'adversaire le plus proche 
+    def closest_opponent(self):
         return min([(self.player.distance(player), player) for player in self.opponents])
-	#liste des players
+	
+    #liste des joueurs
     @property
     def list_player(self):
         return [self.state.player_state(it, ip) for (it, ip) in self.state.players]
 
-	#joeur avec la balle 
+	#joueur avec la balle 
     @property
     def player_with_ball(self):
         return min([(self.player.distance(self.ball),player) for player in self.list_player])[1]
     
-    #test balle avec le joueur
+    #test joueur avec la balle
     @property
     def test_ball(self):
         return (self.player_with_ball == self.player)
     
+    #coin haut gauche
+    @property
+    def tirCoinHautG(self):
+        return Vector2D(0, 90) - self.ball
+    
+    #coin bas gauche
+    @property
+    def tirCoinBasG(self):
+        return Vector2D(0, 0) - self.ball
+    
+    #coin haut droit
+    @property
+    def tirCoinBasG(self):
+        return Vector2D(150, 90) - self.ball
+    
+    #coin bas gdroit
+    @property
+    def tirCoinBasG(self):
+        return Vector2D(150, 0) - self.ball
+    
     @property
     def ballameliorer(self):
         return self.state.ball.position  + 5* self.state.ball.vitesse
+    
     @property 
     def teamdef(self):
         if self.id_team == 1:
@@ -93,6 +127,7 @@ class SuperState(object):
         else:
             (posdef,condition) =(3/4, self.ballameliorer.x < GAME_WIDTH*(2/3))
         return (posdef, condition)
+    
     @property 
     def teamatt(self):
         if self.id_team == 1:
@@ -106,15 +141,31 @@ class SuperState(object):
         for(id_team, id_player) in self.state.players:
             if (id_team == self.id_team) and (id_player != self.id_player):
                 return self.state.player_state(id_team, id_player).position
-
-
-class SimpleStrategy ( Strategy ):
-    def __init__ ( self , action , name ):
-        super().__init__ ( name )
-        self.action = action
-        
-    def compute_strategy (self, state , id_team , id_player):
-        s = SuperState (state , id_team , id_player )
-        return self.action(s)
             
             
+    #trouver la distance entre 2 points
+    def getDistanceTo(self, obj):
+        return self.player.distance(obj)
+
+   
+
+
+
+
+
+
+
+
+
+
+
+#class SimpleStrategy ( Strategy ):
+#    def __init__ ( self , action , name ):
+#        super().__init__ ( name )
+#        self.action = action
+#        
+#    def compute_strategy (self, state , id_team , id_player):
+#        s = SuperState (state , id_team , id_player )
+#        return self.action(s)
+#            
+#            
