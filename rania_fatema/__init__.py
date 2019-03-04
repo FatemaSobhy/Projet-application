@@ -21,9 +21,9 @@ from .strategies import *
 def get_team(nb_players):
     team = SoccerTeam (name = "Fatema & Rania")
     if nb_players == 1:
-        team.add("Striker", Attaquant())
+        team.add("Striker", Tir())
     if nb_players == 2:
-        team.add("Attaquant", Attaquant())
+        team.add("Attaquant", Tir())
         team.add("Defenseur", Gardien())
     return team
 
