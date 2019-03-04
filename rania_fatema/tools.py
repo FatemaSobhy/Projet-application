@@ -30,6 +30,20 @@ class SuperState(object):
     def goal_opponent(self):
         return Vector2D(GAME_WIDTH * (2- self.id_team), GAME_HEIGHT /2)
     
+    @property
+    def pos_def(self):
+        if self.id_team == 1:
+            pos = GAME_WIDTH/5
+        else:
+            pos = (4*GAME_WIDTH)/5
+        return pos
+    
+    @property
+    def milieu(self):
+        if self.id_team == 1:
+            return self.ball.x >= GAME_WIDTH/2
+        else:
+            return self.ball.x <= GAME_WIDTH/2
     #id_team de l'équipe adverse
     @property
     def id_opponent(self):
@@ -84,12 +98,12 @@ class SuperState(object):
     #liste des joueurs
     @property
     def list_player(self):
-        return [self.state.player_state(it, ip) for (it, ip) in self.state.players]
+        return [self.state.player_state(it, ip).position for (it, ip) in self.state.players]
 
 	#joueur avec la balle 
     @property
     def player_with_ball(self):
-        return min([(self.player.distance(self.ball),player) for player in self.list_player])[1]
+        return min([(player.distance(self.ball),player) for player in self.list_player], key=lambda x: x[0])[1]
     
     #test joueur avec la balle
     @property
@@ -141,16 +155,22 @@ class SuperState(object):
         for(id_team, id_player) in self.state.players:
             if (id_team == self.id_team) and (id_player != self.id_player):
                 return self.state.player_state(id_team, id_player).position
-            
-            
+    
+    #liste des coequipiers
+    @property
+    def listecoequipier(self):
+        return [self.state.player_state(id_team, id_player).position for (id_team, id_player) in self.state.players if (id_team == self.id_team) and (id_player != self.id_player)]
+   
+    @property
+    def coequipierproche(self):
+        return min([(self.player.distance(player), player) for player in self.listecoequipier])[1]
+        
+                  
     #trouver la distance entre 2 points
     def getDistanceTo(self, obj):
         return self.player.distance(obj)
 
    
-
-
-
 
 
 

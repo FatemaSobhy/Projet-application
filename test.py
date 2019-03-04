@@ -19,11 +19,12 @@ team2 = SoccerTeam(name="Team 2")
 #team2.add("defenseur2", SimpleStrategy(defenseur, 'Defenseur2'))
 
 team1.add("Attaquant 1", Tir())  
-#team1.add("Defenseur 1", Defenseur1())
-team1.add("Gardien 1", Gardien())
-team2.add("Gardien 2", Gardien())  
-#team2.add("Defenseur 2", Defenseur())
-#team2.add("Fonceur",Fonceur())
+team2.add("Attaquant 2", Tir())
+team1.add("Defenseur 1", Gardien())
+#team1.add("Defenseur1", Defenseur1())
+#team2.add("Gardien 2", Gardien())  
+team2.add("Defenseur 2", Defenseur1())
+#team2.add("Fonceur", Tir())
 
 
 # Create a match
