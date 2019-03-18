@@ -47,9 +47,9 @@ class SuperState(object):
     @property
     def milieu(self):
         if self.id_team == 1:
-            return self.ball.x >= GAME_WIDTH/2
-        else:
             return self.ball.x <= GAME_WIDTH/2
+        else:
+            return self.ball.x > GAME_WIDTH/2
         
     #id_team de l'équipe adverse
     @property
@@ -58,7 +58,7 @@ class SuperState(object):
     
     #pour se deplacer vers un objet
     def deplacement(self, obj):
-        return (obj -self.player).normalize()*1500
+        return (obj -self.player).normalize()*6
     
     @property
     def goal_radius(self):
@@ -96,7 +96,7 @@ class SuperState(object):
     
     #si c'est un adversaire ou pas
     @property
-    def Test_opponents(self):
+    def test_opponents(self):
         for i in opponents:
             return True
         return False
@@ -114,7 +114,7 @@ class SuperState(object):
 	#joueur avec la balle 
     @property
     def player_with_ball(self):
-        return min([(player.distance(self.ball),player) for player in self.list_player], key=lambda x: x[0])[1]
+        return min([(player.distance(self.ball), player) for player in self.list_player], key=lambda x: x[0])[1]
     
     #test joueur avec la balle
     @property
@@ -141,17 +141,30 @@ class SuperState(object):
     def tirCoinBasG(self):
         return Vector2D(150, 0) - self.ball
     
+    #tir coin haut
+    @property
+    def tirCoinHaut(self):
+        if self.id_team == 1:
+            return Vector2D(GAME_HEIGHT, GAME_WIDTH) - self.ball
+        else:
+            return Vector2D(0, 90) - self.ball
+    
     #position balle anticipée
     @property
     def balleamelioree(self):
-        return self.state.ball.position  + 5* self.state.ball.vitesse
+        return self.state.ball.position  + 4 * self.state.ball.vitesse
+    
+    #position balle anticipée
+    @property
+    def balleamelioree2(self):
+        return self.state.ball.position  + 8 * self.state.ball.vitesse
     
     @property 
     def teamdef(self):
         if self.id_team == 1:
             (posdef, condition) = (1/4, self.balleamelioree.x > GAME_WIDTH*(1/3))
         else:
-            (posdef,condition) =(3/4, self.balleamelioree.x < GAME_WIDTH*(2/3))
+            (posdef,condition) = (3/4, self.balleamelioree.x < GAME_WIDTH*(2/3))
         return (posdef, condition)
     
     @property 
@@ -159,12 +172,12 @@ class SuperState(object):
         if self.id_team == 1:
             (posatta, nextpos) = (self.player.x < GAME_WIDTH*(1/2), GAME_WIDTH*(6/10))
         else:
-            (posatta,nextpos) =(self.player.x > GAME_WIDTH*(1/2), GAME_WIDTH*(4/10))
+            (posatta,nextpos) = (self.player.x > GAME_WIDTH*(1/2), GAME_WIDTH*(4/10))
         return (posatta, nextpos)
     
     @property
     def coequipier(self):
-        for(id_team, id_player) in self.state.players:
+        for (id_team, id_player) in self.state.players:
             if (id_team == self.id_team) and (id_player != self.id_player):
                 return self.state.player_state(id_team, id_player).position
     
@@ -185,6 +198,11 @@ class SuperState(object):
     @property
     def coequipierprochedugoal(self):
         return min([(self.player.distance(self.goal), player) for player in self.listecoequipier],key=lambda x: x[0])[1]
+    
+    @property
+    def coequipierprocheball(self):
+        return min([(self.player.distance(self.ball), player) for player in self.listecoequipier],key=lambda x: x[0])[1]
+    
     @property
     def dist_coequipier_player(self):
         return Vector2D(self.player.x - self.coequipierproche.x, self.player.y - self.coequipierproche.y).norm
@@ -199,22 +217,18 @@ class SuperState(object):
             return self.ball.x >= 2*GAME_WIDTH/3
         else:
             return self.ball.x <= GAME_WIDTH/3
+        
+    #s'il y a aucun opponent derriere le joueur
     @property
     def estderriere(self):
         if self.id_team == 1 :
-            if self.closest_opponent.x < self.player.x :
-                return 1 
-            else:
-                return 0
-            
+            return self.closest_opponent.x > self.player.x
         if self.id_team == 2 :
-            if self.closest_opponent.x > self.player.x :
-                return 1 
-            else:
-                return 0
+            return self.closest_opponent.x < self.player.x
+                
     @property
     def dribble(self) :
-        if self.estderriere == 0 : #si l'adversaire est derrière on dribble 
+        if self.estderriere: #si l'adversaire est derrière on dribble 
             if self.closest_opponent.y > self.player.y or self.closest_opponent.y == self.player.y : #Si le joueur vient par la droite
                 dir = (self.goal_opponent - self.player).normalize() * 1.5
                 dir.angle -= 3.14/6
@@ -230,6 +244,39 @@ class SuperState(object):
         else : 
             shoot = self.goal_opponent - self.player
             return SoccerAction(shoot = shoot.normalize()*1.2)
+    
+    #le joueur a-t-il la balle ?
+    def has_ball(self, pos):
+        return self.ball.distance(pos) <= PLAYER_RADIUS + BALL_RADIUS
+    
+    
+    @property 
+    def pos_att(self):
+        if self.id_team ==1:
+            return Vector2D(4*GAME_WIDTH/5, GAME_HEIGHT/3)
+        else:
+            return Vector2D(GAME_WIDTH/5, GAME_HEIGHT/3)
+    @property
+    def pos_att2(self):
+        if self.id_team == 1:
+            return Vector2D( 2*GAME_WIDTH/3,  2*GAME_HEIGHT/3)
+        else:
+            return Vector2D(GAME_WIDTH/3, 2*GAME_HEIGHT/3)
+            
+    @property 
+    def balldevantjoueur(self):
+        if self.id_team == 1:
+            return self.ball.x > self.player.x
+        else:
+            return self.ball.x < self.player.x
+
+    
+    @property
+    def quart_terrain(self):
+        if self.id_team == 1:
+            return GAME_WIDTH/4
+        else:
+            return (3*GAME_WIDTH)/4
     
     
    

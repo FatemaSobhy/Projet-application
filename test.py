@@ -18,15 +18,26 @@ team2 = SoccerTeam(name="Team 2")
 #team2.add("attaquant2", SimpleStrategy(attaquant, 'Attaquant2'))
 #team2.add("defenseur2", SimpleStrategy(defenseur, 'Defenseur2'))
 
-team1.add("Attaquant 1", Tir())  
-team2.add("Attaquant 2", Tir())
-team1.add("Defenseur 1", Gardien())
-#team1.add("Defenseur1", Defenseur1())
-#team2.add("Gardien 2", Gardien())  
-team2.add("Defenseur 2", Defenseur1())
-#team2.add("Fonceur", Tir())
+#team1.add("Attaquant 1", Attaquant())  
+#team2.add("Attaquant 2", Tir())
+#team1.add("Gardien 1", Gardien3())
+#team1.add("Defenseur1", Defenseur())
+##team1.add("Attaquant", Tir())  
+#team2.add("Defenseur 2", Defenseur())
+#team2.add("Gardien 2", Gardien3())
+
+team1.add("Tir", Tir())  
+team2.add("Attaquant3", Attaquant3 ())
+team2.add("Attaquant 2", Attaquant2())
+team2.add("Gardien", Gardien3())
+team2.add("Defenseur1", Defenseur())
+team1.add("Gardien 2", Gardien3())  
+team1.add("Attaquant2", Attaquant())
+team1.add("Defenseur1", Defenseur())
 
 
+
+ 
 # Create a match
 simu = Simulation(team1, team2)
 
