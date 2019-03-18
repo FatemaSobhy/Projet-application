@@ -23,7 +23,13 @@ def get_team(nb_players):
     if nb_players == 1:
         team.add("Striker", Tir())
     if nb_players == 2:
-        team.add("Attaquant", Tir())
+        team.add("Attaquant", Attaquant())
         team.add("Defenseur", Defenseur())
+    if nb_players == 4:
+        team.add("Attaquant", Attaquant())
+        team.add("Gardien", Gardien1())
+        team.add("Attaquant", Attaquant())
+        team.add("Defenseur", Defenseur())
+        
     return team
 
