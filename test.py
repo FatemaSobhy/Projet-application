@@ -18,6 +18,7 @@ team2 = SoccerTeam(name="Team 2")
 #team2.add("attaquant2", SimpleStrategy(attaquant, 'Attaquant2'))
 #team2.add("defenseur2", SimpleStrategy(defenseur, 'Defenseur2'))
 
+<<<<<<< HEAD
 #team1.add("Attaquant 1", Attaquant())  
 #team2.add("Attaquant 2", Tir())
 #team1.add("Gardien 1", Gardien3())
@@ -25,6 +26,16 @@ team2 = SoccerTeam(name="Team 2")
 ##team1.add("Attaquant", Tir())  
 #team2.add("Defenseur 2", Defenseur())
 #team2.add("Gardien 2", Gardien3())
+=======
+team1.add("Tir", Tir())  
+team2.add("Attaquant3", Attaquant3 ())
+team2.add("Attaquant 2", Attaquant2())
+team2.add("Gardien", Gardien2())
+team2.add("Defenseur1", Defenseur())
+team1.add("Gardien 2", Gardien())  
+team1.add("Attaquant2", Attaquant())
+team1.add("Defenseur1", Defenseur())
+>>>>>>> 4135f4e0d167f35443c0b228cbe4a93733ed273e
 
 team1.add("Tir", Tir())  
 team2.add("Attaquant3", Attaquant3 ())
