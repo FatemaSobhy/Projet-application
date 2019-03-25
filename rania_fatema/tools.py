@@ -47,7 +47,15 @@ class SuperState(object):
     @property
     def milieu(self):
         if self.id_team == 1:
+            return self.ball.x >= GAME_WIDTH/2
+        else:
             return self.ball.x <= GAME_WIDTH/2
+    
+    #moitié de terrain
+    @property
+    def moitie(self):
+        if self.id_team == 1:
+            return self.ball.x < GAME_WIDTH/2
         else:
             return self.ball.x > GAME_WIDTH/2
 
@@ -82,7 +90,7 @@ class SuperState(object):
     #le joueur peut-il tirer?
     @property
     def can_shoot(self):
-        return (self.state.ball.position - self.state.player_state(self.id_team, self.id_player).position).norm <= BALL_RADIUS + PLAYER_RADIUS
+        return self.getDistanceTo(self.ball) <= BALL_RADIUS + PLAYER_RADIUS
     
     #tirer
     @property
@@ -124,34 +132,25 @@ class SuperState(object):
     @property
     def test_ball(self):
         return (self.player_with_ball == self.player)
-    
-    #tir coin haut gauche
-    @property
-    def tirCoinHautG(self):
-        return Vector2D(0, 90) - self.ball
+
     
     #tir coin bas gauche
     @property
     def tirCoinBasG(self):
-        return Vector2D(0, 0) - self.ball
+        return Vector2D(0, 0) - self.player
     
-    #tir coin haut droit
+    #tir coin bas droit
     @property
     def tirCoinBasG(self):
-        return Vector2D(150, 90) - self.ball
-    
-    #tir coin bas gdroit
-    @property
-    def tirCoinBasG(self):
-        return Vector2D(150, 0) - self.ball
+        return Vector2D(150, 0) - self.player
     
     #tir coin haut
     @property
     def tirCoinHaut(self):
         if self.id_team == 1:
-            return Vector2D(GAME_HEIGHT, GAME_WIDTH) - self.ball
+            return Vector2D(GAME_HEIGHT, GAME_WIDTH) - self.player
         else:
-            return Vector2D(0, 90) - self.ball
+            return Vector2D(0, 90) - self.player
     
     #position balle anticipée
     @property
@@ -202,6 +201,10 @@ class SuperState(object):
     @property
     def coequipierprochedugoal(self):
         return min([(self.player.distance(self.goal), player) for player in self.listecoequipier],key=lambda x: x[0])[1]
+    
+    @property
+    def coequipierprochegoal_op(self):
+        return min([(self.player.distance(self.goal_opponent), player) for player in self.listecoequipier],key=lambda x: x[0])[1]
     
     @property
     def coequipierprocheball(self):
@@ -332,16 +335,30 @@ class SuperState(object):
     
     @property 
     def pos_att(self):
-        if self.id_team ==1:
-            return Vector2D(4*GAME_WIDTH/5, GAME_HEIGHT/3)
+        if self.id_team == 1:
+            return Vector2D(4*(GAME_WIDTH/5), GAME_HEIGHT/3)
         else:
             return Vector2D(GAME_WIDTH/5, GAME_HEIGHT/3)
     @property
     def pos_att2(self):
         if self.id_team == 1:
-            return Vector2D( 2*GAME_WIDTH/3,  2*GAME_HEIGHT/3)
+            return Vector2D(2*(GAME_WIDTH/3),  2*(GAME_HEIGHT/3))
         else:
-            return Vector2D(GAME_WIDTH/3, 2*GAME_HEIGHT/3)
+            return Vector2D(GAME_WIDTH/3, 2*(GAME_HEIGHT/3))
+        
+    @property
+    def pos_att3(self):
+        if self.id_team == 1:
+            return Vector2D((5/8)*GAME_WIDTH, (2/3)*GAME_HEIGHT)
+        else:
+            return Vector2D((3/8)*GAME_WIDTH, (2/3)*GAME_HEIGHT)
+        
+    @property
+    def pos_att4(self):
+        if self.id_team == 1:
+            return Vector2D((7/8)*GAME_WIDTH, GAME_HEIGHT/3.)
+        else:
+            return Vector2D((1/8)*GAME_WIDTH, GAME_HEIGHT/3.)
         
         
     @property 
@@ -350,19 +367,42 @@ class SuperState(object):
             return self.ball.x > self.player.x
         else:
             return self.ball.x < self.player.x
+        
+    @property
+    def test_posball(self):
+        if self.id_team == 1:
+            return self.ball.x < self.pos_def
+        else:
+            return self.ball.x > self.pos_def
 
-
-
-
-
-
-#class SimpleStrategy ( Strategy ):
-#    def __init__ ( self , action , name ):
-#        super().__init__ ( name )
-#        self.action = action
-#        
-#    def compute_strategy (self, state , id_team , id_player):
-#        s = SuperState (state , id_team , id_player )
-#        return self.action(s)
-#            
-#            
+    @property
+    def test_posatt(self):
+        if self.id_team == 1:
+            return self.coequipierproche.x > self.player.x
+        else:
+            return self.coequipierproche.x < self.player.x
+        
+    @property 
+    def listecoequipiersdevant(self):
+        L= []
+        for player in self.listecoequipier:
+            if self.id_team ==1:
+                if self.player.x < player.x:
+                    L.append(player)
+            else:
+                if self.player.x > player.x:
+                    L.append(player)
+        return L
+    
+    @property
+    def coequipierprochedevant(self):
+        return min([(self.player.distance(player), player) for player in self.listecoequipiersdevant],key=lambda x: x[0])[1]
+    
+    @property
+    def coeqdvt(self):
+        if self.id_team == 1:
+            return self.coequipierprochedevant.x > self.player.x
+        else:
+            return self.coequipierprochedevant.x < self.player.x
+        
+            
