@@ -155,7 +155,7 @@ class SuperState(object):
     #position balle anticipée
     @property
     def balleamelioree(self):
-        return self.state.ball.position  + 4 * self.state.ball.vitesse
+        return self.state.ball.position  + (5 * self.state.ball.vitesse)
     
     #position balle anticipée
     @property
@@ -339,6 +339,7 @@ class SuperState(object):
             return Vector2D(4*(GAME_WIDTH/5), GAME_HEIGHT/3)
         else:
             return Vector2D(GAME_WIDTH/5, GAME_HEIGHT/3)
+    
     @property
     def pos_att2(self):
         if self.id_team == 1:
@@ -349,16 +350,16 @@ class SuperState(object):
     @property
     def pos_att3(self):
         if self.id_team == 1:
-            return Vector2D((5/8)*GAME_WIDTH, (2/3)*GAME_HEIGHT)
+            return Vector2D((5*GAME_WIDTH)/8., (2*GAME_HEIGHT)/3.)
         else:
-            return Vector2D((3/8)*GAME_WIDTH, (2/3)*GAME_HEIGHT)
+            return Vector2D((3*GAME_WIDTH)/8., (2*GAME_HEIGHT)/3.)
         
     @property
     def pos_att4(self):
         if self.id_team == 1:
-            return Vector2D((7/8)*GAME_WIDTH, GAME_HEIGHT/3.)
+            return Vector2D((7*GAME_WIDTH)/8., GAME_HEIGHT/3.)
         else:
-            return Vector2D((1/8)*GAME_WIDTH, GAME_HEIGHT/3.)
+            return Vector2D(GAME_WIDTH/8., GAME_HEIGHT/3.)
         
         
     @property 
@@ -384,7 +385,7 @@ class SuperState(object):
         
     @property 
     def listecoequipiersdevant(self):
-        L= []
+        L = []
         for player in self.listecoequipier:
             if self.id_team ==1:
                 if self.player.x < player.x:
@@ -405,4 +406,64 @@ class SuperState(object):
         else:
             return self.coequipierprochedevant.x < self.player.x
         
+    
+
+    @property 
+    def balldevantjoueur(self):
+        if self.id_team == 1:
+            return self.ball.x > self.player.x
+        else:
+            return self.ball.x < self.player.x
+        
+    @property 
+    def testjoueurdevant(self):
+        if self.id_team == 1:
+            return self.coequipierproche.x >= self.player.x
+        else:
+            return self.coequipierproche.x < self.player.x
+    @property 
+    def listecoequipiersdevant(self):
+        L= []
+        if self.id_team ==1:
+            for player in self.listecoequipier:
+                if self.player.x < player.x:
+                    L.append(player)
+        else:
+            for player in self.listecoequipier:
+                if self.player.x > player.x:
+                    L.append(player)
+        return L
+    
+    @property
+    def coequipierprochedevant(self):
+        return min([(self.player.distance(player), player) for player in self.listecoequipiersdevant],key=lambda x: x[0])[1]
+    
             
+    @property
+    def attaquant_avance2(self):
+        if self.id_team == 1: 
+            if self. has_ball(self.coequipierproche) and self.testjoueurdevant:
+                acceleration = self.player - Vector2D(self.coequipierproche.x*1.2, self.player.y)
+                return SoccerAction(acceleration = acceleration)
+            else:
+                return SoccerAction(self.deplacement(self.pos_att))
+        else: 
+            if self. has_ball(self.coequipierproche) and self.testjoueurdevant:
+                acceleration = self.player - Vector2D(self.coequipierproche.x/1.2, self.player.y)
+                return SoccerAction(acceleration = acceleration)
+            else: 
+                return SoccerAction(self.deplacement(self.pos_att))
+    @property
+    def attaquant_avance4(self):
+        if self.id_team == 1: 
+            if self. has_ball(self.coequipierproche) and self.testjoueurdevant:
+                acceleration = self.player - Vector2D(self.coequipierproche.x*1.2, self.player.y)
+                return SoccerAction(acceleration = acceleration)
+            else:
+                return SoccerAction(self.deplacement(self.pos_att2))
+        else: 
+            if self. has_ball(self.coequipierproche) and self.testjoueurdevant:
+                acceleration = self.player - Vector2D(self.coequipierproche.x/1.2, self.player.y)
+                return SoccerAction(acceleration = acceleration)
+            else: 
+                return SoccerAction(self.deplacement(self.pos_att2))        
