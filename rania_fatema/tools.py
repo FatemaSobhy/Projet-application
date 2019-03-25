@@ -47,9 +47,9 @@ class SuperState(object):
     @property
     def milieu(self):
         if self.id_team == 1:
-            return self.ball.x >= GAME_WIDTH/2
-        else:
             return self.ball.x <= GAME_WIDTH/2
+        else:
+            return self.ball.x > GAME_WIDTH/2
     
     #moitié de terrain
     @property
@@ -197,6 +197,9 @@ class SuperState(object):
     #trouver la distance entre objet et joueur
     def getDistanceTo(self, obj):
         return self.player.distance(obj)
+    
+    def coequipierDistanceTo(self, obj):
+        return self.coequipierproche.distance(obj)
     
     @property
     def coequipierprochedugoal(self):
@@ -397,7 +400,7 @@ class SuperState(object):
     
     @property
     def coequipierprochedevant(self):
-        return min([(self.player.distance(player), player) for player in self.listecoequipiersdevant],key=lambda x: x[0])[1]
+        return min([(self.player.distance(player), player) for player in self.listecoequipiersdevant],key=lambda x: x[0], default=(None, None))[1]
     
     @property
     def coeqdvt(self):
@@ -421,6 +424,23 @@ class SuperState(object):
             return self.coequipierproche.x >= self.player.x
         else:
             return self.coequipierproche.x < self.player.x
+    
+    @property 
+    def testopponentderriere(self):
+        if self.id_team == 1:
+            for opponent in self.opponents:
+                if opponent.x <= self.player.x:
+                    return False
+            return True
+                    
+        else:
+            for opponent in self.opponents:
+                if opponent.x >= self.player.x:
+                    return False
+            return True
+
+
+
     @property 
     def listecoequipiersdevant(self):
         L= []
@@ -434,36 +454,29 @@ class SuperState(object):
                     L.append(player)
         return L
     
-    @property
-    def coequipierprochedevant(self):
-        return min([(self.player.distance(player), player) for player in self.listecoequipiersdevant],key=lambda x: x[0])[1]
-    
             
     @property
-    def attaquant_avance2(self):
+    def attaquant_avance(self):
         if self.id_team == 1: 
-            if self. has_ball(self.coequipierproche) and self.testjoueurdevant:
-                acceleration = self.player - Vector2D(self.coequipierproche.x*1.2, self.player.y)
+            if self.testjoueurdevant:
+                acceleration = Vector2D(self.coequipierproche.x*1.2, self.player.y) -self.player 
                 return SoccerAction(acceleration = acceleration)
-            else:
-                return SoccerAction(self.deplacement(self.pos_att))
+            
         else: 
-            if self. has_ball(self.coequipierproche) and self.testjoueurdevant:
-                acceleration = self.player - Vector2D(self.coequipierproche.x/1.2, self.player.y)
+            if self.testjoueurdevant:
+                acceleration = Vector2D(self.coequipierproche.x/1.2, self.player.y) - self.player
                 return SoccerAction(acceleration = acceleration)
-            else: 
-                return SoccerAction(self.deplacement(self.pos_att))
-    @property
-    def attaquant_avance4(self):
-        if self.id_team == 1: 
-            if self. has_ball(self.coequipierproche) and self.testjoueurdevant:
-                acceleration = self.player - Vector2D(self.coequipierproche.x*1.2, self.player.y)
-                return SoccerAction(acceleration = acceleration)
-            else:
-                return SoccerAction(self.deplacement(self.pos_att2))
-        else: 
-            if self. has_ball(self.coequipierproche) and self.testjoueurdevant:
-                acceleration = self.player - Vector2D(self.coequipierproche.x/1.2, self.player.y)
-                return SoccerAction(acceleration = acceleration)
-            else: 
-                return SoccerAction(self.deplacement(self.pos_att2))        
+  
+
+
+
+
+
+
+
+
+
+
+
+
+        
