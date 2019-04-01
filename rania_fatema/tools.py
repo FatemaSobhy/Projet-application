@@ -207,7 +207,7 @@ class SuperState(object):
     
     @property
     def coequipierprochegoal_op(self):
-        return min([(self.player.distance(self.goal_opponent), player) for player in self.listecoequipier],key=lambda x: x[0])[1]
+        return min([(player.distance(self.goal_opponent), player) for player in self.listecoequipier],key=lambda x: x[0])[1]
     
     @property
     def coequipierprocheball(self):
