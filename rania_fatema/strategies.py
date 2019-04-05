@@ -72,7 +72,9 @@ class Attaquant2(Strategy):
         Strategy.__init__(self, "Attaquant")
         
     def compute_strategy(self,state, id_team, id_player):
-        s = SuperState(state, id_team, id_player)    
+        s = SuperState(state, id_team, id_player) 
+        shoot = Shoot(s)
+        move = Move(s)
         
         if s.milieu:
             return SoccerAction(s.deplacement(s.pos_att))
@@ -272,6 +274,7 @@ class Defenseur1(Strategy):
             else:
                 deplacement= s.balleamelioree -s.player
                 return SoccerAction(acceleration = deplacement)  
+
 class Defenseur2(Strategy):
     def __init__(self):
         Strategy.__init__(self, "Def") 

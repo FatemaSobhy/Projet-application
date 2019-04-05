@@ -1,5 +1,6 @@
 from soccersimulator import Strategy, SoccerAction, Vector2D, SoccerTeam, Simulation, show_simu
 from soccersimulator.settings import *
+from .tools import *
 
 class Move(object):
     def __init__(self, superstate):
