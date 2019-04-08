@@ -160,6 +160,19 @@ class SuperState(object):
                 if opponent.x >= self.player.x:
                     return False
             return True
+    @property 
+    def testopponentdevantball(self):
+        if self.id_team == 1:
+            for opponent in self.opponents:
+                if opponent.x <= self.ball.x:
+                    return False
+            return True
+                    
+        else:
+            for opponent in self.opponents:
+                if opponent.x >= self.ball.x:
+                    return False
+            return True
     
     @property
     def estderriere(self):
@@ -169,8 +182,8 @@ class SuperState(object):
             return self.closest_opponent.x < self.player.x
     
     
-    ####### Méthodes et propriétés liées aux positions de terrain #######
-    ########################################################
+    ####### Méthodes et propriétés liées aux positions du terrain #######
+    ####################################################################
     
     #milieu du terrain
     @property
@@ -192,9 +205,9 @@ class SuperState(object):
     @property
     def test_posball(self):
         if self.id_team == 1:
-            return self.ball.x < self.pos_def
+            return self.ball.x <= self.pos_def
         else:
-            return self.ball.x > self.pos_def
+            return self.ball.x >= self.pos_def
     
     @property 
     def terrain_5 (self):
@@ -326,7 +339,19 @@ class SuperState(object):
                 return SoccerAction(acceleration = acceleration)
   
 
-
+    @property 
+    def deplacementopponentderriere(self):
+        if self.id_team == 1:
+            for opponent in self.opponents:
+                if opponent.x <= self.player.x:
+                    deplacement = opponent - self.player
+                    return SoccerAction(acceleration = deplacement)
+                    
+        else:
+            for opponent in self.opponents:
+                if opponent.x >= self.player.x:
+                    deplacement = opponent - self.player
+                    return SoccerAction(acceleration = deplacement)
 
 
 
