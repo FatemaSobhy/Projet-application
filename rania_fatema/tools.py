@@ -137,10 +137,26 @@ class SuperState(object):
     @property
     def closest_opponent(self):
         return min([(self.player.distance(player), player) for player in self.opponents],key=lambda x: x[0])[1]
+    @property
+    def closest_opponentball(self):
+        return min([(self.player.distance(self.ball), player) for player in self.opponents],key=lambda x: x[0])[1]
+     #trouver l'adversaire le plus proche
+    @property
+    def loin_opponent(self):
+        return max([(self.player.distance(player), player) for player in self.opponents],key=lambda x: x[0])[1]
     
     @property
     def dist_opponent_player(self):
         return Vector2D(self.player.x - self.closest_opponent.x, self.player.y - self.closest_opponent.y).norm
+    @property
+    def xdudef(self):
+        if self.id_team == 1:
+            return (GAME_WIDTH + self.loin_opponent.x)/2
+            
+        else: 
+            return self.loin_opponent.x/2
+    
+            
     
     #id_team de l'équipe adverse
     @property
@@ -231,7 +247,7 @@ class SuperState(object):
         if self.id_team == 1:
             pos = GAME_WIDTH*0.3
         else:
-            pos = GAME_WIDTH*0.7
+            pos = GAME_WIDTH*0.6
         return pos
     
     @property

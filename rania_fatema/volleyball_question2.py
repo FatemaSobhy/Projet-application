@@ -12,6 +12,7 @@ import math
 from .actions import *
 from soccersimulator import VolleySimulation, volley_show_simu
 import math
+import random 
 
 class Attaque(Strategy):
     def __init__(self):
@@ -26,6 +27,8 @@ class Attaque(Strategy):
                 if s.avantmilieu:
                     return SoccerAction(shoot = (s.shootavantmilieu - s.player).normalize()*2)
                 else:
-                    return SoccerAction(shoot = (s.closest_opponent - s.player).normalize()*6 )
+                    x = s.xdudef
+                    y = (s.loin_opponent.y +GAME_HEIGHT)/2
+                    return SoccerAction(shoot = (Vector2D(x,y) - s.player).normalize()*6 )
             else:
                 return SoccerAction(acceleration = s.balleamelioree -s.player)

@@ -6,6 +6,7 @@ import math
 from rania_fatema.volleyball_question1 import *
 from rania_fatema.volleyball_question2 import *
 from rania_fatema.volleyball_question3 import *
+from rania_fatema.volleyball_question4 import *
 
 
 
@@ -15,9 +16,10 @@ team1 = SoccerTeam(name="Team 1")
 team2 = SoccerTeam(name="Team 2")
 
 # Add players
-team1.add("Player 1", Attaque())  # Random strategy
+team1.add("Player 1", Attaque())  
+team1.add("Player 1", contre1()) # Random strategy
 team2.add("Player 2", Attaque())   # Random strategy
-
+#team2.add("Player 2", Defense())  
 # Create a match
 simu = VolleySimulation(team1, team2)
 

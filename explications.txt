@@ -1,0 +1,9 @@
+volleyball_question1.py
+Dans cette question, chacun joueur s'echauffe en shootant la balle a lui meme avant une petite force jusqu'il avance avant la ligne et ensuite il fait la passe a l'adversaire avec une force (normalize*6) 
+volleyball_question2.py
+Dans cette question j'ai presque la meme chose de la question d'avant mais lorsqu'il avance du milieu, il fait la passe dans l'endroit lui vide en prenant le milieu entre le bord du terrain et 
+l'adversaire le plus loin du joueur  
+volleyball_question3.py
+dans cette question j'ai deposer le defenseur dans une position y qui varie avec la balle et
+qui shoot apres de la meme maniere
+

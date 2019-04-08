@@ -22,8 +22,13 @@ class Echauffement(Strategy):
     def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state, id_team, id_player)
        
-        if s.has_ball(s.player):
-            passe= s.closest_opponent - s.player
-            return SoccerAction(shoot= passe.normalize()*6)
+        if s.milieu:
+            if s.can_shoot:
+                if s.avantmilieu:
+                    return SoccerAction(shoot = (s.shootavantmilieu - s.player).normalize()*2)
+                else:
+                    return SoccerAction(shoot = (s.closest_opponent - s.player).normalize()*6 )
+            else:
+                return SoccerAction(acceleration = s.balleamelioree -s.player)
 
 
