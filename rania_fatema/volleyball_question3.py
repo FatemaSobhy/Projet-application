@@ -29,8 +29,12 @@ class Defense(Strategy):
         else:
             if s.test_posball:
                 if s.can_shoot:
-                    shoot = (s.coequipierprochegoal_op - s.player)
-                    return SoccerAction(shoot = shoot.normalize()*4)    
+                    if s.avantmilieu:
+                    return SoccerAction(shoot = (s.shootavantmilieu - s.player).normalize()*2)
+                else:
+                    x = s.xdudef
+                    y = (s.loin_opponent.y +GAME_HEIGHT)/2
+                    return SoccerAction(shoot = (Vector2D(x,y) - s.player).normalize()*6 )    
                 else:
                     deplacement= s.balleamelioree -s.player
                     return SoccerAction(acceleration = deplacement)
