@@ -8,7 +8,7 @@ Created on Mon Feb 18 12:22:07 2019
 
 from soccersimulator import Strategy, SoccerAction, Vector2D, SoccerTeam, Simulation, show_simu
 from .strategies import *
-#
+from .volleyball_question1 import *
 #def get_team(nb_players):
 #    team = SoccerTeam (name = "Fateam & Rania")
 #    if nb_players == 1:

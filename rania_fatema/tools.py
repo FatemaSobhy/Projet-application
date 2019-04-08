@@ -73,11 +73,11 @@ class SuperState(object):
     #coequipier le plus proche
     @property
     def coequipierproche(self):
-        return min([(self.player.distance(player), player) for player in self.listecoequipier],key=lambda x: x[0])[1]
+        return min([(self.player.distance(player), player) for player in self.listecoequipier],key=lambda x: x[0], default=(None, None))[1]
     
     @property
     def coequipierprochegoal_op(self):
-        return min([(player.distance(self.goal_opponent), player) for player in self.listecoequipier],key=lambda x: x[0])[1]
+        return min([(player.distance(self.goal_opponent), player) for player in self.listecoequipier],key=lambda x: x[0], default=(None, None))[1]
     
     def coequipierDistanceTo(self, obj):
         return self.coequipierproche.distance(obj)
@@ -180,7 +180,13 @@ class SuperState(object):
             return self.closest_opponent.x > self.player.x
         if self.id_team == 2 :
             return self.closest_opponent.x < self.player.x
-    
+    @property
+    def opponentavecball(self):
+        for opponent in self.opponents:
+            if (self.has_ball(opponent)):
+                return opponent
+        return None 
+            
     
     ####### Méthodes et propriétés liées aux positions du terrain #######
     ####################################################################
@@ -192,14 +198,40 @@ class SuperState(object):
             return self.ball.x <= GAME_WIDTH/2
         else:
             return self.ball.x > GAME_WIDTH/2
+    @property
+    def avantmilieu(self):
+        if self.id_team == 1:
+            return self.ball.x <= GAME_WIDTH*0.3
+        else:
+            return self.ball.x > GAME_WIDTH*0.7
+    @property
+    def shootavantmilieu(self):
+        if self.id_team == 1:
+            return Vector2D((2*GAME_WIDTH/5), (GAME_HEIGHT/2))
+        else:
+            return Vector2D((GAME_WIDTH*0.6), (GAME_HEIGHT/2))
+    @property
+    def bord(self):
+        if self.id_team == 1:
+            return Vector2D(self.closest_opponent.x,GAME_HEIGHT/3)
+        else:
+            return Vector2D((GAME_WIDTH*0.6), (GAME_HEIGHT/2))
+    
+    #quart du terrain du terrain
+    @property
+    def quart(self):
+        if self.id_team == 1:
+            return self.ball.x < GAME_WIDTH/2.5
+        else:
+            return 3*self.ball.x > GAME_WIDTH/4
         
     #position du defenseur
     @property
     def pos_def(self):
         if self.id_team == 1:
-            pos = GAME_WIDTH/5
+            pos = GAME_WIDTH*0.3
         else:
-            pos = (4*GAME_WIDTH)/5
+            pos = GAME_WIDTH*0.7
         return pos
     
     @property
@@ -248,6 +280,7 @@ class SuperState(object):
             return Vector2D((7*GAME_WIDTH)/8., GAME_HEIGHT/3.)
         else:
             return Vector2D(GAME_WIDTH/8., GAME_HEIGHT/3.)
+    
         
     ####### Méthodes et propriétés liées aux positions dU GOAL #######
     ########################################################
@@ -352,6 +385,11 @@ class SuperState(object):
                 if opponent.x >= self.player.x:
                     deplacement = opponent - self.player
                     return SoccerAction(acceleration = deplacement)
+                
+                
+    ####### TME SOLO #######
+    ####################################################################
+    
 
 
 
