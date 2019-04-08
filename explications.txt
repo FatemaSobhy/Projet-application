@@ -6,4 +6,5 @@ l'adversaire le plus loin du joueur
 volleyball_question3.py
 dans cette question j'ai deposer le defenseur dans une position y qui varie avec la balle et
 qui shoot apres de la meme maniere
-
+dans la question 4, j'ai joué chaque joueur en etant un defenseur et devient un attaquant lorsque la balle revient dans son terraain
+dans la question 5, j'ai vu lequel est le plus proche de la balle il court vers elle et ensuite il lui fait la passe et enfin il shoot vers devant mais l'autre attaquant cours vers l'avant
