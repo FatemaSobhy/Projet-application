@@ -310,6 +310,38 @@ class Defenseur2(Strategy):
                     pos = Vector2D(x, a* x + b)
                     return SoccerAction(s.deplacement(pos))
 
+class Defenseur3(Strategy):
+    def __init__(self):
+        Strategy.__init__(self, "Def")
+    def compute_strategy(self,state, id_team, id_player):
+        s = SuperState(state, id_team, id_player)
+        cage = s.goal
+        x = s.pos_def
+        a = ((s.ball.y-cage.y)/s.ball.x - cage.x)
+        b = (GAME_HEIGHT/2) - (a * x)
+       
+        if not s.milieu:
+            pos = Vector2D(x, a* x + b)
+            return SoccerAction(s.deplacement(pos))
+        else:
+            if s.test_posball:
+                if s.can_shoot:
+                    shoot = (s.coequipierprochegoal_op - s.player)
+                    return SoccerAction(shoot = shoot.normalize()*4)    
+                else:
+                    deplacement= s.balleamelioree -s.player
+                    return SoccerAction(acceleration = deplacement)
+            else:
+                if s.getDistanceTo(s.ball) <= s.coequipierDistanceTo(s.ball):
+                    if s.getDistanceTo(s.ball) < PLAYER_RADIUS + BALL_RADIUS:
+                        shoot = s.coequipierprochegoal_op -s.player
+                        return SoccerAction(shoot = shoot.normalize()*4)
+                    if not s.testopponentderriere and not s.has_ball(s.closest_opponent):
+                        deplacement = s.balleamelioree -s.player
+                        return SoccerAction(acceleration = deplacement)
+                    else:
+                        pos = Vector2D(x, a* x + b)
+
                 
 class Gardien(Strategy):
     def __init__(self):
