@@ -119,18 +119,14 @@ class SuperState(object):
     @property
     def coequipierprochedevant(self):
         return min([(self.player.distance(player), player) for player in self.listecoequipiersdevant],key=lambda x: x[0], default=(None, None))[1]
-<<<<<<< HEAD
+
     @property
     def coequipierprochedevant2(self):
         if self.listecoequipiersdevant == []:
-            return self.closest_opponent
+            return self.coequipierproche
         else:
             return min([(self.player.distance(player), player) for player in self.listecoequipiersdevant],key=lambda x: x[0], default=(None, None))[1]
-    #COEQUIPIER DEVANT OU PAS   
-=======
-
     #test pour savoir si le coequipier est devant le joueur ou pas     
->>>>>>> d6a95b880940566ba39ce29ec2f4c553a1034f3d
     @property 
     def testjoueurdevant(self):
         if self.id_team == 1:
@@ -168,7 +164,8 @@ class SuperState(object):
     def id_opponent(self):
         return (self.id_team % 2)+1
     
-<<<<<<< HEAD
+  
+    #test si l'adversaire est derrière le joueur ou pas
 #    @property 
 #    def testopponentderriere(self):
 #        if self.id_team == 1:
@@ -184,24 +181,10 @@ class SuperState(object):
 #            return True
     
     
-=======
-    #test si l'adversaire est derrière le joueur ou pas
-    @property 
-    def testopponentderriere(self):
-        if self.id_team == 1:
-            for opponent in self.opponents:
-                if opponent.x <= self.player.x:
-                    return False
-            return True
-                    
-        else:
-            for opponent in self.opponents:
-                if opponent.x >= self.player.x:
-                    return False
-            return True
+
+  
         
     #test si l'adversaire est devant la balle ou pas
->>>>>>> d6a95b880940566ba39ce29ec2f4c553a1034f3d
     @property 
     def testopponentdevantball(self):
         if self.id_team == 1:
@@ -260,7 +243,7 @@ class SuperState(object):
             return GAME_WIDTH/4
         else:
             return (3*GAME_WIDTH)/4
-<<<<<<< HEAD
+
     
     @property
     def posattaquantdanssonmilieu (self):
@@ -280,11 +263,9 @@ class SuperState(object):
             return self.ball.x >= self.terrain2_5
         else:
             return self.ball.x <= self.terrain2_5
-        
-=======
+
         
     #position de l'attaquant 2
->>>>>>> d6a95b880940566ba39ce29ec2f4c553a1034f3d
     @property 
     def pos_att2(self):
         if self.id_team ==1:
