@@ -32,27 +32,11 @@ class Tir(Strategy):
 
 class Attaquant(Strategy): 
     def __init__(self):
-        Strategy .__init__( self ,"Attaquant")
+        Strategy .__init__(self ,"Attaquant")
         
     
     def compute_strategy(self , state , id_team , id_player):
         s = SuperState(state, id_team, id_player)
-#       
-#        if s.player.distance(s.ball) < PLAYER_RADIUS+BALL_RADIUS:
-#            shoot = s.ball- s.player
-##            if s.terrain_5:
-##                return SoccerAction(shoot.normalize()*6)
-##            else: 
-##                return SoccerAction(shoot.normalize()*2)
-#            return SoccerAction(shoot.normalize()*6)
-##        elif s.dist_opponent_player < PLAYER_RADIUS + BALL_RADIUS:
-##            if s.dist_coequipier_player< 10:
-##                shoot = s.coequipierproche - s.player
-##                return SoccerAction(shoot)
-##            else:
-#                SoccerAction(acceleration = s.player - s.goal_opponent)
-#        return SoccerAction(acceleration = s.ball - s.player) 
-        
         
         if s.player.distance(s.ball) < PLAYER_RADIUS + BALL_RADIUS:
             if s.closest_opponent.distance(s.player) < (PLAYER_RADIUS*20):
@@ -76,47 +60,26 @@ class Attaquant2(Strategy):
         shoot = Shoot(s)
         move = Move(s)
         
-        if s.milieu:
-            return SoccerAction(s.deplacement(s.pos_att))
+        if s.milieu: # si la balle se trouve sur sa moitié de terrain
+            return SoccerAction(s.deplacement(s.pos_att2)) # il reste dans sa position devant les cages adverses
         else:
-            if s.getDistanceTo(s.ball) < s.coequipierDistanceTo(s.ball):
-                if s.getDistanceTo(s.ball) < PLAYER_RADIUS + BALL_RADIUS:
-                    if s.testjoueurdevant:
-                        shoot = s.coequipierproche - s.player
+            if s.getDistanceTo(s.ball) < s.coequipierDistanceTo(s.ball): # s'il est plus proche de la balleque son coéquipier 
+                if s.can_shoot:
+                    if s.testjoueurdevant: # si un défenseur (ou un autre joueur adverse) le bloque
+                        shoot = s.coequipierproche - s.player # il envoie la balle à un de ses coéquipier
                         return SoccerAction(shoot = shoot.normalize()*3)
                     else:
-                        shoot= s.goal_opponent -s.player
-                        return SoccerAction(shoot = shoot) 
+                        shoot = s.goal_opponent - s.player # sinon il tente de marquer un but
+                        return SoccerAction(shoot = shoot.normalize()) 
                 return SoccerAction(acceleration = s.balleamelioree - s.player)
             if s.has_ball(s.coequipierproche):
                 return s.attaquant_avance
-            return SoccerAction(s.deplacement(s.pos_att))
-
-
-           
-#            if s.getDistanceTo(s.ball) < PLAYER_RADIUS + BALL_RADIUS:
-#                if  s.getDistanceTo(s.goal_opponent) < (PLAYER_RADIUS * 20):
-#                    shoot = s.goal_opponent - s.player
-#                    return SoccerAction(shoot = shoot.normalize()*6)
-#                if s.getDistanceTo(s.closest_opponent) < 3:
-#                    if s.testjoueurdevant:
-#                        shoot= s.coequipierprochedevant - s.player
-#                        return SoccerAction(shoot=shoot.normalize()* 6)
-#                    else:
-#                        return s.dribble
-#                
-#            for player in s.opponents:
-#                if s.has_ball(player):
-#                    if Vector2D(s.closest_opponent.x -s.player.x, s.closest_opponent.y -s.player.y).norm < Vector2D(s.closest_opponent.x- s.coequipierproche.x,s.closest_opponent.y -s.coequipierproche.y).norm: 
-#                        return SoccerAction(acceleration = s.closest_opponent - s.player)
-#            else:
-#                return SoccerAction(s.deplacement(s.pos_att))
+            return SoccerAction(s.deplacement(s.pos_att2))
                     
 class Attaquant3(Strategy): 
     def __init__(self):
         Strategy .__init__( self ,"Attaquant")
-        
-    
+
     def compute_strategy( self , state , id_team , id_player ):
         s = SuperState(state, id_team, id_player)
         
@@ -149,62 +112,39 @@ class Attaquant3(Strategy):
 
 class Attaquant4(Strategy):
     def __init__(self):
-        Strategy .__init__( self ,"Attaquant")
+        Strategy .__init__(self ,"Attaquant 1")
         
-    
-    def compute_strategy( self , state , id_team , id_player ):
+    def compute_strategy(self , state , id_team , id_player):
         s = SuperState(state, id_team, id_player)
-        if s.milieu: 
-            if s.player.distance(s.balleamelioree) < PLAYER_RADIUS + BALL_RADIUS:
-                if s.testjoueurdevant:
-                    shoot= s.coequipierprochedevant - s.player
-                    return SoccerAction(shoot=shoot.normalize()* 5)
+        if s.milieu: # si la balle se trouve sur son milieu de terrain
+            if s.can_shoot:
+                if s.testjoueurdevant: # si un de ses coéquupiers est devant lui
+                    print('hey')
+                    #if s.coequipierprochedevant:
+                    shoot = s.coequipierprochedevant - s.player # il lui envoie la balle
+                    return SoccerAction(shoot = shoot.normalize()*3)
                 else:
-                     shoot = s.goal_opponent - s.balleamelioree
-                     return SoccerAction(shoot= shoot.normalize()*3)
+                     shoot = s.goal_opponent - s.ball # sinon il tire
+                     return SoccerAction(shoot = shoot.normalize()*3)
                 
             else:
                 acceleration = s.balleamelioree - s.player
                 return SoccerAction(acceleration = acceleration)
-            
-            
+    
         else:
-            if s.getDistanceTo(s.ball) <= s.coequipierDistanceTo(s.ball):
-                if s.getDistanceTo(s.ball) < PLAYER_RADIUS + BALL_RADIUS:
-                    if s.player.distance(s.goal_opponent) < PLAYER_RADIUS*30:
-                        shoot = s.goal_opponent -s.player
-                        return SoccerAction(shoot = shoot.normalize()*4)
-                    if s.testjoueurdevant:
+            if s.getDistanceTo(s.ball) <= s.coequipierDistanceTo(s.ball): # s'il est plus proche de la balle que son coéquipier
+                if s.can_shoot:
+                    shoot = s.goal_opponent - s.player # il tente de marquer
+                    return SoccerAction(shoot = shoot.normalize()*3)
+                    if s.testjoueurdevant: 
                         shoot = s.coequipierprochegoal_op - s.player
-                        return SoccerAction(shoot =shoot.normalize()*4)
-
-                acceleration= s.balleamelioree -s.player
+                        return SoccerAction(shoot =shoot.normalize()*3)
+                acceleration = s.balleamelioree - s.player
                 return SoccerAction(acceleration = acceleration)
             if s.has_ball(s.coequipierproche):
-                return s.attaquant_avance
                 print('4')
-            
-            return SoccerAction(s.deplacement(s.pos_att2))
-#                if s.player.distance(s.goal_opponent) < PLAYER_RADIUS*5 and s.player.distance(s.closest_opponent)<3:
-#                    if s.testjoueurdevant:
-#                        shoot= s.coequipierprochedevant - s.player
-#                        return SoccerAction(shoot=shoot.normalize()* 6)
-#                    else:
-#                         return s.dribble 
-#                 
-#                else:
-#                    if s.testjoueurdevant:
-#                        shoot= s.coequipierprochedevant - s.player
-#                        return SoccerAction(shoot=shoot.normalize()* 6)
-#                    if s.player.distance(s.goal_opponent) < PLAYER_RADIUS*5 and s.player.distance(s.closest_opponent)>3:
-#                        shoot = s.goal_opponent - s.player
-#                        return SoccerAction(shoot = shoot.normalize()*6)
-#            for player in s.opponents:
-#                    if s.has_ball(player):
-#                        if Vector2D(s.closest_opponent.x -s.player.x, s.closest_opponent.y -s.player.y).norm < Vector2D(s.closest_opponent.x- s.coequipierproche.x,s.closest_opponent.y -s.coequipierproche.y).norm: 
-#                            return SoccerAction(acceleration = s.closest_opponent - s.player)
-#            else:
-#                 return SoccerAction(acceleration = s.deplacement(s.pos_att2))
+                return s.attaquant_avance           
+        return SoccerAction(s.deplacement(s.pos_att))
 
 class Attaquant5(Strategy):
     def __init__(self):
@@ -217,15 +157,15 @@ class Attaquant5(Strategy):
             if s.can_shoot:
                 return SoccerAction(shoot = s.goal_opponent - s.player)
             else:
-                return SoccerAction(acceleration = s.balleamelioree-s.player)
+                return SoccerAction(acceleration = s.balleamelioree - s.player)
         else:
             if s.can_shoot:
                 if s.testjoueurdevant:
-                    return SoccerAction(shoot = s.coequipierprochedevant-s.player)
+                    return SoccerAction(shoot = s.coequipierprochedevant - s.player)
                 else:
-                     return SoccerAction(shoot = s.goal_opponent-s.player)
+                     return SoccerAction(shoot = s.goal_opponent - s.player)
             else:
-                return SoccerAction(acceleration=s.balleamelioree - s.player)
+                return SoccerAction(acceleration = s.balleamelioree - s.player)
                 
 
 class Defenseur(Strategy):
@@ -252,88 +192,87 @@ class Defenseur(Strategy):
             return SoccerAction(s.deplacement(pos))
        
              
-class Defenseur1(Strategy):
-    def __init__(self):
-        Strategy.__init__(self, "Def") 
-    def compute_strategy(self,state, id_team, id_player):
-        s = SuperState(state, id_team, id_player) 
-        cage = s.goal
-        x = s.pos_def
-        a = ((s.ball.y-cage.y)/s.ball.x - cage.x)
-        b = (GAME_HEIGHT/2) - (a * x)
-	        
-        if not s.milieu:
-            pos = Vector2D(x, a* x + b)
-            return SoccerAction(s.deplacement(pos))
-        else:
-            if s.can_shoot:
-                shoot = (s.coequipierprochegoal_op - s.player)
-                return SoccerAction(shoot = shoot.normalize()*3)
-            if not s.testopponentderriere:
-                return SoccerAction(s.deplacement(Vector2D(x, a* x + b)))
-            else:
-                deplacement= s.balleamelioree - s.player
-                return SoccerAction(acceleration = deplacement)  
+#class Defenseur1(Strategy):
+#    def __init__(self):
+#        Strategy.__init__(self, "Def") 
+#    def compute_strategy(self,state, id_team, id_player):
+#        s = SuperState(state, id_team, id_player) 
+#        cage = s.goal
+#        x = s.pos_def
+#        a = ((s.ball.y-cage.y)/s.ball.x - cage.x)
+#        b = (GAME_HEIGHT/2) - (a * x)
+#	        
+#        if not s.milieu:
+#            pos = Vector2D(x, a* x + b)
+#            return SoccerAction(s.deplacement(pos))
+#        else:
+#            if s.can_shoot:
+#                shoot = (s.coequipierprochegoal_op - s.player)
+#                return SoccerAction(shoot = shoot.normalize()*3)
+#            if not s.testopponentderriere:
+#                return SoccerAction(s.deplacement(Vector2D(x, a* x + b)))
+#            else:
+#                deplacement= s.balleamelioree - s.player
+#                return SoccerAction(acceleration = deplacement)  
 
 class Defenseur2(Strategy):
     def __init__(self):
-        Strategy.__init__(self, "Def") 
-    def compute_strategy(self,state, id_team, id_player):
+        Strategy.__init__(self, "Defenseur") 
+        
+    def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state, id_team, id_player) 
         cage = s.goal
         x = s.pos_def
         a = ((s.ball.y-cage.y)/s.ball.x - cage.x)
         b = (GAME_HEIGHT/2) - (a * x)
 	        
-        if not s.milieu:
-            pos = Vector2D(x, a* x + b)
-            return SoccerAction(s.deplacement(pos))
+        if not s.milieu: # si la balle n'est pas dans sa moitié de terrain
+            pos = Vector2D(x, a*x + b)
+            return SoccerAction(s.deplacement(pos)) # il reste sur sa ligne de défense
         else:
-            if s.test_posball:
+            if s.test_posball: # si la balle est juste devant sa ligne de défense 
                 if s.can_shoot:
-                    shoot = (s.coequipierprochegoal_op - s.player)
-                    return SoccerAction(shoot = shoot.normalize()*4)               
+                    shoot = (s.coequipierprochegoal_op - s.player) # envoie la balle à son coéquipier le plus proche des cages adverses
+                    return SoccerAction(shoot = shoot.normalize()*2)               
                 else:
-                    deplacement= s.balleamelioree -s.player
+                    deplacement = s.balleamelioree - s.player
                     return SoccerAction(acceleration = deplacement)
             else:
-                if not s.testopponentderriere:
+                if not s.testopponentderriere: # s'il n'y a pas d'adversaire derrière lui
                     return s.deplacementopponentderriere
                 if s.can_shoot:
                     shoot = (s.coequipierprochegoal_op - s.player)
-                    return SoccerAction(shoot = shoot.normalize()*4)
+                    return SoccerAction(shoot = shoot.normalize()*2)
                 else:
                     pos = Vector2D(x, a* x + b)
                     return SoccerAction(s.deplacement(pos))
 
-class Defenseur3(Strategy):
-    def __init__(self):
-        Strategy.__init__(self, "Def")
-    def compute_strategy(self,state, id_team, id_player):
-        s = SuperState(state, id_team, id_player)
-        cage = s.goal
-        x = s.pos_def
-        a = ((s.ball.y-cage.y)/s.ball.x - cage.x)
-        b = (GAME_HEIGHT/2) - (a * x)
-       
-        if not s.milieu:
-            pos = Vector2D(x, a* x + b)
-            return SoccerAction(s.deplacement(pos))
-        else:
-            if s.test_posball:
-                if s.can_shoot:
-                    shoot = (s.coequipierprochegoal_op - s.player)
-                    return SoccerAction(shoot = shoot.normalize()*4)    
-                else:
-                    deplacement= s.balleamelioree -s.player
-                    return SoccerAction(acceleration = deplacement)
-            else:
-                pos = Vector2D(x, a* x + b)
-                return SoccerAction(s.deplacement(pos))
+#class Defenseur3(Strategy):
+#    def __init__(self):
+#        Strategy.__init__(self, "Def")
+#    def compute_strategy(self,state, id_team, id_player):
+#        s = SuperState(state, id_team, id_player)
+#        cage = s.goal
+#        x = s.pos_def
+#        a = ((s.ball.y-cage.y)/s.ball.x - cage.x)
+#        b = (GAME_HEIGHT/2) - (a * x)
+#       
+#        if not s.milieu:
+#            pos = Vector2D(x, a* x + b)
+#            return SoccerAction(s.deplacement(pos))
+#        else:
+#            if s.test_posball:
+#                if s.can_shoot:
+#                    shoot = (s.coequipierprochegoal_op - s.player)
+#                    return SoccerAction(shoot = shoot.normalize()*4)    
+#                else:
+#                    deplacement= s.balleamelioree -s.player
+#                    return SoccerAction(acceleration = deplacement)
+#            else:
+#                pos = Vector2D(x, a* x + b)
+#                return SoccerAction(s.deplacement(pos))
 
-               
-
-                
+        
 class Gardien(Strategy):
     def __init__(self):
         Strategy.__init__(self, "Gardien")
@@ -376,19 +315,17 @@ class Gardien4(Strategy):
     def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state, id_team, id_player)
         
-        if s.test_posball:
+        if s.test_posball: #si la balle est derrière le défenseur
             if s.can_shoot:
-                return SoccerAction(shoot = (s.coequipierprochegoal_op - s.player)*4)
-            if s.has_ball(s.coequipierproche):
-                return SoccerAction(acceleration = s.deplacement(s.goal))
-            if s.getDistanceTo(s.ball) >= s.coequipierDistanceTo(s.ball):
-                return SoccerAction(acceleration = s.deplacement(s.goal))
-            if not s.testopponentdevantball:
+                return SoccerAction(shoot = (s.coequipierprochegoal_op - s.player)*3) # fait la passe au coéquipier le plus proche des cages adverses
+            if s.has_ball(s.coequipierproche): # si c'est son coéquipier qui a la balle
+                return SoccerAction(acceleration = s.deplacement(s.goal)) # il retourne dans ses cages
+            if s.testopponentdevantball: # si un adversaire se trouve devant le ballon
                 return SoccerAction(acceleration = s.deplacement(s.goal))
             else : 
                 return SoccerAction(acceleration = s.balleamelioree - s.player)
         else :
-            return SoccerAction(acceleration = s.deplacement(s.goal))
+            return SoccerAction(acceleration = s.deplacement(s.goal)) # il reste dans ses cages
 
         
                     
