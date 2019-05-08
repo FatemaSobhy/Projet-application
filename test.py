@@ -23,7 +23,7 @@ team2 = SoccerTeam(name="Team 2")
 #team2.add("Gardien 2", Gardien3())
 
 
-team2.add("Attaquant4", Attaquant4())
+team2.add("Attaquant1", Attaquant4())
 team2.add("Gardien 2", Gardien4())
 team2.add("Defenseur2", Defenseur4())
 team2.add("Attaquant2", Attaquant2())

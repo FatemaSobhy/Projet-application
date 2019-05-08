@@ -63,14 +63,13 @@ class Attaquant2(Strategy):
         if s.milieu: # si la balle se trouve sur sa moitié de terrain
             return SoccerAction(s.deplacement(s.pos_att2)) # il reste dans sa position devant les cages adverses
         else:
-            if s.getDistanceTo(s.ball) < s.coequipierDistanceTo(s.ball): # s'il est plus proche de la balleque son coéquipier 
+            if s.getDistanceTo(s.ball) < s.coequipierDistanceTo(s.ball): # s'il est plus proche de la balle que son coéquipier 
                 if s.can_shoot:
                     if s.testjoueurdevant: # si un défenseur (ou un autre joueur adverse) le bloque
                         shoot = s.coequipierproche - s.player # il envoie la balle à un de ses coéquipier
-                        return SoccerAction(shoot = shoot.normalize()*3)
                     else:
                         shoot = s.goal_opponent - s.player # sinon il tente de marquer un but
-                        return SoccerAction(shoot = shoot.normalize()) 
+                    return SoccerAction(acceleration = s.goal_opponent - s.ball, shoot = shoot.normalize()*3) 
                 return SoccerAction(acceleration = s.balleamelioree - s.player)
             if s.has_ball(s.coequipierproche):
                 return s.attaquant_avance
@@ -117,10 +116,10 @@ class Attaquant4(Strategy):
     def compute_strategy(self , state , id_team , id_player):
         s = SuperState(state, id_team, id_player)
         
-        if s.milieu:# si la balle se trouve sur son milieu de terrain
-            if s.testposballterrain2_5:
-                if s.player.distance(s.balleamelioree) < PLAYER_RADIUS + BALL_RADIUS:
-                    shoot= s.coequipierprochegoal_op- s.player
+        if s.milieu: # si la balle se trouve sur son milieu de terrain
+            if s.testposballterrain2_5: # si la balle est devant l'attaquant
+                if s.can_shoot:
+                    shoot= s.coequipierprochegoal_op - s.player
                     return SoccerAction(shoot=shoot.normalize()* 5)
                 else:
                     acceleration = s.balleamelioree - s.player
@@ -133,7 +132,7 @@ class Attaquant4(Strategy):
                 if s.can_shoot:
                     if s.testjoueurdevant: 
                         shoot = s.coequipierprochegoal_op - s.player
-                        return SoccerAction(shoot =shoot.normalize()*3)
+                        return SoccerAction(shoot = shoot.normalize()*3)
                     shoot = s.goal_opponent - s.player # il tente de marquer
                     return SoccerAction(shoot = shoot.normalize()*3)
                 acceleration = s.balleamelioree - s.player
@@ -364,14 +363,14 @@ class Gardien4(Strategy):
     def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state, id_team, id_player)
         
-        if s.test_posball: #si la balle est derrière le défenseur
+        if s.test_posball2: #si la balle est derrière le défenseur
             if s.can_shoot:
-                return SoccerAction(shoot = (s.coequipierprochedevant2- s.player)*4)
+                return SoccerAction(shoot = (s.coequipierprochedevant2 - s.player)*3)
             if s.has_ball(s.coequipierproche):
                 return SoccerAction(acceleration = s.deplacement(s.goal))
             if s.getDistanceTo(s.ball) >= s.coequipierDistanceTo(s.ball):
                 return SoccerAction(acceleration = s.deplacement(s.goal))
-            if not s.testopponentdevantball:
+            if s.testopponentdevantball:
                 return SoccerAction(shoot = (s.coequipierprochegoal_op - s.player)*3) # fait la passe au coéquipier le plus proche des cages adverses
             if s.has_ball(s.coequipierproche): # si c'est son coéquipier qui a la balle
                 return SoccerAction(acceleration = s.deplacement(s.goal)) # il retourne dans ses cages
@@ -380,7 +379,3 @@ class Gardien4(Strategy):
                 return SoccerAction(acceleration = s.balleamelioree - s.player)
         else :
             return SoccerAction(acceleration = s.deplacement(s.goal))# il reste dans ses cages
-
-
-        
-                    

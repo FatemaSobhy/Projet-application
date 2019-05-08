@@ -53,10 +53,6 @@ def begin_round ( self , team1 , team2 , state ):
     self.last_score = self.simu.score[1] # Score of Team 1
     self.cur_state = self.strategy.get_state(state , id_team=1 , id_player=0)
     self.rewards = []    
-   
-    
-    
-    
     
 def update_round ( self , team1 , team2 , state ):
     # Q - learning update

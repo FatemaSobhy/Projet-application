@@ -235,6 +235,13 @@ class SuperState(object):
             return self.ball.x < self.pos_def+10
         else:
             return self.ball.x > self.pos_def-10
+        
+    @property
+    def test_posball2(self):
+        if self.id_team == 1:
+            return self.ball.x < self.pos_def-10
+        else: 
+            return self.ball.x > self.pos_def+10
     
     #1/4 du terrain
     @property
@@ -244,19 +251,20 @@ class SuperState(object):
         else:
             return (3*GAME_WIDTH)/4
 
-    
     @property
     def posattaquantdanssonmilieu (self):
         if self.id_team == 1:
             return Vector2D(2*GAME_WIDTH/5, 2*GAME_HEIGHT/3)
         else:
             return Vector2D(3*GAME_WIDTH/5, 2*GAME_HEIGHT/3)
+        
     @property
     def terrain2_5 (self):
         if self.id_team == 1:
-            return 1*GAME_WIDTH/3
+            return GAME_WIDTH/3
         else:
-            return 2*GAME_WIDTH/3
+            return (2*GAME_WIDTH)/3
+        
     @property
     def testposballterrain2_5 (self):
         if self.id_team == 1:
