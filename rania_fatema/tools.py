@@ -110,7 +110,12 @@ class SuperState(object):
     @property
     def coequipierprochedevant(self):
         return min([(self.player.distance(player), player) for player in self.listecoequipiersdevant],key=lambda x: x[0], default=(None, None))[1]
-
+    @property
+    def coequipierprochedevant2(self):
+        if self.listecoequipiersdevant == []:
+            return self.closest_opponent
+        else:
+            return min([(self.player.distance(player), player) for player in self.listecoequipiersdevant],key=lambda x: x[0], default=(None, None))[1]
     #COEQUIPIER DEVANT OU PAS   
     @property 
     def testjoueurdevant(self):
@@ -147,19 +152,21 @@ class SuperState(object):
     def id_opponent(self):
         return (self.id_team % 2)+1
     
-    @property 
-    def testopponentderriere(self):
-        if self.id_team == 1:
-            for opponent in self.opponents:
-                if opponent.x <= self.player.x:
-                    return False
-            return True
-                    
-        else:
-            for opponent in self.opponents:
-                if opponent.x >= self.player.x:
-                    return False
-            return True
+#    @property 
+#    def testopponentderriere(self):
+#        if self.id_team == 1:
+#            for opponent in self.opponents:
+#                if opponent.x <= self.player.x:
+#                    return False
+#            return True
+#                    
+#        else:
+#            for opponent in self.opponents:
+#                if opponent.x >= self.player.x:
+#                    return False
+#            return True
+    
+    
     @property 
     def testopponentdevantball(self):
         if self.id_team == 1:
@@ -177,9 +184,9 @@ class SuperState(object):
     @property
     def estderriere(self):
         if self.id_team == 1 :
-            return self.closest_opponent.x > self.player.x
+            return self.closest_opponent.x >= self.player.x
         if self.id_team == 2 :
-            return self.closest_opponent.x < self.player.x
+            return self.closest_opponent.x <= self.player.x
     
     
     ####### Méthodes et propriétés liées aux positions du terrain #######
@@ -222,6 +229,25 @@ class SuperState(object):
         else:
             return (3*GAME_WIDTH)/4
     
+    @property
+    def posattaquantdanssonmilieu (self):
+        if self.id_team == 1:
+            return Vector2D(2*GAME_WIDTH/5, 2*GAME_HEIGHT/3)
+        else:
+            return Vector2D(3*GAME_WIDTH/5, 2*GAME_HEIGHT/3)
+    @property
+    def terrain2_5 (self):
+        if self.id_team == 1:
+            return 1*GAME_WIDTH/3
+        else:
+            return 2*GAME_WIDTH/3
+    @property
+    def testposballterrain2_5 (self):
+        if self.id_team == 1:
+            return self.ball.x >= self.terrain2_5
+        else:
+            return self.ball.x <= self.terrain2_5
+        
     @property 
     def pos_att(self):
         if self.id_team ==1:
@@ -248,6 +274,15 @@ class SuperState(object):
             return Vector2D((7*GAME_WIDTH)/8., GAME_HEIGHT/3.)
         else:
             return Vector2D(GAME_WIDTH/8., GAME_HEIGHT/3.)
+    
+    @property
+    def testposballgardien(self):
+        if self.test_posball:
+            if (self.ball.y > 0 and self.ball.y < 10) or (self.ball.y >0 and self.ball.y  < GAME_HEIGHT):
+                return  True
+        else:
+            return False
+    
         
     ####### Méthodes et propriétés liées aux positions dU GOAL #######
     ########################################################

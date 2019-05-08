@@ -25,11 +25,12 @@ team2 = SoccerTeam(name="Team 2")
 
 team2.add("Attaquant4", Attaquant4())
 team2.add("Gardien 2", Gardien4())
-team2.add("Defenseur2", Defenseur3())
+team2.add("Defenseur2", Defenseur4())
 team2.add("Attaquant2", Attaquant2())
 team1.add("Gardien 1", Gardien4())  
-team1.add("Defenseur1", Defenseur2())
+team1.add("Defenseur1", Defenseur4())
 team1.add("Striker", Tir())
+
 
  
 # Create a match
